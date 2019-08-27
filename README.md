@@ -1,6 +1,6 @@
 light Cookbook - [![Cookbook Version](https://img.shields.io/cookbook/v/light.svg)](https://community.opscode.com/cookbooks/light) [![Build Status](https://travis-ci.org/sliim-cookbooks/light.svg?branch=master)](https://travis-ci.org/sliim-cookbooks/light)
 ================
-The light Cookbook - Installs light
+The light Cookbook - Installs [light](https://github.com/haikarainen/light)
 
 Requirements
 ------------
@@ -16,8 +16,8 @@ Attributes
 | ---------------------- | ------ | ------------------------------------------------------------------ |
 | `[light][install_dir]` | String | Installation directory (default: `/opt/light`)                     |
 | `[light][repository]`  | String | light repository (default: `https://github.com/haikarainen/light`) |
-| `[light][reference]`   | String | light repository branch or tag (default: `master`)                 |
-| `[light][env]`         | Hash   | environment for git resource (default: `nil`)                      |
+| `[light][reference]`   | String | light repository branch or tag (default: `v1.0`)                   |
+| `[light][env]`         | Hash   | environment for git resource (default: `{}`)                       |
 
 Usage
 -----

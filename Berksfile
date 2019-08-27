@@ -4,4 +4,5 @@ metadata
 group :kitchen do
   cookbook 'apt'
   cookbook 'git'
+  cookbook 'build-essential'
 end

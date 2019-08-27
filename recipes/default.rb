@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Cookbook Name:: light
-# Recipe:: default
+# Cookbook::light
+# Recipe::default
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@
 
 install_dir = node['light']['install_dir']
 
+package 'help2man'
+
 execute 'make-light' do
   command 'make'
   cwd install_dir
@@ -27,7 +29,7 @@ end
 git install_dir do
   repository node['light']['repository']
   reference node['light']['reference']
-  environment node['light']['env'] unless node['light']['env'].nil?
+  environment node['light']['env'] unless node['light']['env'].empty?
   action :sync
   notifies :run, 'execute[make-light]'
 end
@@ -45,6 +47,13 @@ link '/usr/local/bin/light' do
   owner 'root'
   group 'root'
   to "#{install_dir}/light"
+end
+
+directory '/etc/udev/rules.d' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  recursive true
 end
 
 file '/etc/udev/rules.d/90-backlight.rules' do

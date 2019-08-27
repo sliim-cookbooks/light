@@ -5,19 +5,23 @@ require 'chefspec/berkshelf'
 
 describe 'light::default' do
   let(:subject) do
-    ChefSpec::SoloRunner.new(platform: 'debian', version: '9.0') do |node|
+    ChefSpec::SoloRunner.new(platform: 'debian', version: '9.9') do |node|
       node.override['light']['install_dir'] = '/opt/light'
       node.override['light']['repository'] = 'https://custom/repo.git'
       node.override['light']['reference'] = 'custom-ref'
-      node.override['light']['env'] = 'custom-env'
+      node.override['light']['env'] = { 'CUSTOM' => 'custom-env' }
     end.converge(described_recipe)
+  end
+
+  it 'installs package[help2man]' do
+    expect(subject).to install_package('help2man')
   end
 
   it 'syncs git[/opt/light]' do
     expect(subject).to sync_git('/opt/light')
       .with(repository: 'https://custom/repo.git',
             reference: 'custom-ref',
-            environment: 'custom-env')
+            environment: { 'CUSTOM' => 'custom-env' })
   end
 
   ['/etc/light/save', '/etc/light/mincap'].each do |dir|
@@ -35,6 +39,14 @@ describe 'light::default' do
       .with(owner: 'root',
             group: 'root',
             to: '/opt/light/light')
+  end
+
+  it 'creates directory[/etc/udev/rules.d]' do
+    expect(subject).to create_directory('/etc/udev/rules.d')
+      .with(owner: 'root',
+            group: 'root',
+            mode: '0755',
+            recursive: true)
   end
 
   it 'creates file[/etc/udev/rules.d/90-backlight.rules]' do
